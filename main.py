@@ -1,0 +1,26 @@
+import reddit_story_scrapper
+import tts
+import thumbnail
+from subtitles_gen import generate_subtitles
+from video_gen import generate_video
+from random import choice
+from youtube_uploader import upload
+
+subreddits = ["offmychest", "confession", "TrueOffMyChest", "relationships", "shortscarystories",
+    "pettyrevenge", "TodayILearned"]
+
+subreddit = choice(subreddits)
+print(subreddit)
+
+reddit = reddit_story_scrapper.authenticate()
+id, title, content, gender, url = reddit_story_scrapper.get_post_from_subreddit(reddit, subreddit)
+
+tts.speak_and_save(f"{title}\n\n{content}", f"files\\audio\\{id}.mp3", gender)
+
+thumbnail.get_thumbnail(url, id, f"files\\thumbnail\\{id}.png")
+
+generate_subtitles(f"files\\audio\\{id}.mp3", f"files\\subtitles\\{id}.srt")
+
+generate_video("files/asset/minecraft_parkour_1.mp4", f"files\\thumbnail\\{id}.png", "files\\font\\futur.ttf", f"files\\audio\\{id}.mp3", f"files\\subtitles\\{id}.srt", f"results\\{id}.mp4")
+
+upload(f"results\\{id}.mp4", "GOOGLE_OAUTH_SECRECT_FILE_PATH", title, title)
