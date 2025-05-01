@@ -7,13 +7,13 @@ from random import choice
 from youtube_uploader import upload
 
 subreddits = ["offmychest", "confession", "TrueOffMyChest", "relationships", "shortscarystories",
-    "pettyrevenge", "TodayILearned"]
+    "pettyrevenge", "TodayILearned","AmITheAsshole"]
 
 subreddit = choice(subreddits)
 print(subreddit)
 
 reddit = reddit_story_scrapper.authenticate()
-id, title, content, gender, url = reddit_story_scrapper.get_post_from_subreddit(reddit, subreddit)
+id, title, content, gender, url, author = reddit_story_scrapper.get_post_from_subreddit(reddit, subreddit)
 
 tts.speak_and_save(f"{title}\n\n{content}", f"files\\audio\\{id}.mp3", gender)
 
@@ -23,3 +23,4 @@ generate_subtitles(f"files\\audio\\{id}.mp3", f"files\\subtitles\\{id}.srt")
 
 generate_video("files/asset/minecraft_parkour_1.mp4", f"files\\thumbnail\\{id}.png", "files\\font\\futur.ttf", f"files\\audio\\{id}.mp3", f"files\\subtitles\\{id}.srt", f"results\\{id}.mp4")
 
+upload(f"results\\{id}.mp4", "files\\client_secret.json", title, f"{title} - {author}")

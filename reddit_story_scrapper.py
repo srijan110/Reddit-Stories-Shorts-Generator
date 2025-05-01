@@ -24,6 +24,8 @@ def get_post_from_subreddit(reddit=praw.Reddit, subreddit="AmItheAsshole", limit
         title = submission.title
         content = submission.selftext
         url = submission.url
+        author = submission.author
+
         if submission.over_18: continue
 
         gender_codes = re.findall(gender_regex, content, re.IGNORECASE) 
@@ -42,9 +44,9 @@ def get_post_from_subreddit(reddit=praw.Reddit, subreddit="AmItheAsshole", limit
             with open("files\\ids.json","w") as f:
                 json.dump(id_list, f)
 
-            return id, title, content, gender, url
+            return id, title, content, gender, url, author
     
-    return '', '', '', '', ''
+    return '', '', '', '', '', ''
 
 def get_post_from_id(reddit=praw.Reddit, id='1k84kn7'):
     submission = reddit.submission(id)
