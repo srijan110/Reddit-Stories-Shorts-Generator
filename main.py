@@ -23,4 +23,3 @@ generate_subtitles(f"files\\audio\\{id}.mp3", f"files\\subtitles\\{id}.srt")
 
 generate_video("files/asset/minecraft_parkour_1.mp4", f"files\\thumbnail\\{id}.png", "files\\font\\futur.ttf", f"files\\audio\\{id}.mp3", f"files\\subtitles\\{id}.srt", f"results\\{id}.mp4")
 
-upload(f"results\\{id}.mp4", "GOOGLE_OAUTH_SECRECT_FILE_PATH", title, title)
