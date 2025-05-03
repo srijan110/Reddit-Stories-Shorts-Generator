@@ -21,6 +21,6 @@ thumbnail.get_thumbnail(url, id, f"files\\thumbnail\\{id}.png")
 
 generate_subtitles(f"files\\audio\\{id}.mp3", f"files\\subtitles\\{id}.srt")
 
-generate_video(f"results\\{id}.mp4", "files\\font\\futur.ttf", f"files\\audio\\{id}.mp3", "files/asset/minecraft_parkour_1.mp4", f"files\\thumbnail\\{id}.png", f"files\\subtitles\\{id}.srt")
+video_duration = generate_video(f"results\\{id}.mp4", "files\\font\\futur.ttf", f"files\\audio\\{id}.mp3", "files/asset/minecraft_parkour_1.mp4", f"files\\thumbnail\\{id}.png", f"files\\subtitles\\{id}.srt")
 
-upload(f"results\\{id}.mp4", "files\\client_secret.json", title, f"{title} - {author}")
+upload(f"results\\{id}.mp4", "files\\client_secret.json", title, f"{title} - {author}", video_duration)
