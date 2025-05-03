@@ -49,8 +49,8 @@ def generate_video(output_path, font_path, audio_path, background_video_path, th
     start_time = time.time()
     print(f"Starting: {time.time() - start_time}")
 
-    background_video = av.open(background_video_path)
     narrator_audio = av.open(audio_path)
+    background_video = av.open(background_video_path)
 
     font = ImageFont.truetype(font_path, size=28)
 
@@ -89,9 +89,9 @@ def generate_video(output_path, font_path, audio_path, background_video_path, th
             subtitles_image_data.append([img, sub.start.total_seconds() * 20, sub.end.total_seconds() * 20])
 
     with ThreadPoolExecutor(max_workers=16) as executor:
-        for i, frame in enumerate(video_frames):
-            if i % frame_skip != 0: continue
-            i = i // frame_skip
+        for j, frame in enumerate(video_frames):
+            if j % frame_skip != 0: continue
+            i = j // frame_skip
             if i > 20 * video_duration: break
 
             if i % 20 == 0: print(f"{i // 20} sec: {time.time()-start_time}")
