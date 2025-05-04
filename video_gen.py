@@ -76,7 +76,9 @@ def generate_video(output_path, font_path, audio_path, background_video_path, th
     thumbnail = Image.open(thumbnail_path)
     thumbnail = thumbnail.resize((608, int(thumbnail.height * (608 / thumbnail.width))))
 
-    video_duration = narrator_audio.duration
+    audio_stream = next(s for s in narrator_audio.streams if s.type == 'audio')
+    video_duration = int(audio_stream.duration * audio_stream.time_base)
+    print(video_duration)
 
     subtitles_image_data = []
     with open(subtitles_path) as f:
@@ -88,15 +90,19 @@ def generate_video(output_path, font_path, audio_path, background_video_path, th
 
             subtitles_image_data.append([img, sub.start.total_seconds() * 20, sub.end.total_seconds() * 20])
 
+    futures = []
     with ThreadPoolExecutor(max_workers=16) as executor:
         for j, frame in enumerate(video_frames):
             if j % frame_skip != 0: continue
             i = j // frame_skip
-            if i > 20 * video_duration: break
+            if i > 20 * video_duration + 3: break
 
             if i % 20 == 0: print(f"{i // 20} sec: {time.time()-start_time}")
 
-            executor.submit(process_frame, i, frame, thumbnail, subtitles_image_data, video_stream, output)
+            futures.append(executor.submit(process_frame, i, frame, thumbnail, subtitles_image_data, video_stream, output))
+
+        for future in futures:
+            future.result()
 
         for packet in video_stream.encode():
             output.mux(packet)
@@ -113,3 +119,6 @@ def generate_video(output_path, font_path, audio_path, background_video_path, th
     print(f"Time taken: {time_taken}")
     
     return video_duration
+
+if __name__ == "__main__":
+    generate_video("results\\d6xoro.mp4", 'files\\font\\futur.ttf', 'files\\audio\\d6xoro.mp3', 'files\\asset\\minecraft_parkour_1.mp4', 'files\\thumbnail\\d6xoro.png', 'files\\subtitles\\d6xoro.srt')
